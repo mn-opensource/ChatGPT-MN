@@ -108,11 +108,14 @@ const handleSubmit = async (e) => {
     typeText(messageDiv, parsedData);
   }
   else {
-    const err = await response.text();
-    messageDiv.innerHTML = "Something went wrong :(";
-    alert(err);
+    const err = await response.json();
+    const errMessage = err['error']['message'];
+    if (errMessage == 'User Rate Limit Exceeded') {
+      messageDiv.innerHTML = 'Өнөөдөртөө миний "дааж" чадах хэмжээний орчуулга хийх төлбөрийн лимит нь тулчихаж ээ. 🥲 Маргааш хүртэл хүлээгээд дахин оролдоорой. Эсвэл таны өгсөн хандиваар төлбөрийн лимитийг ихэсгэж өдөрт илүү их хэмжээний орчуулга хийлгүүлэх боломжтой шүү. 🔥';
+    } else {
+      messageDiv.innerHTML = 'Өнөөдөртөө энэ системийг үнэгүй ашиглах нөөц ийнхүү дууссан байна. Маргааш дахин оролдоорой. ✌️';
+    }
   }
-
 }
 
 // call handleSubmit upon user submit the message
