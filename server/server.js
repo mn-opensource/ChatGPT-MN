@@ -21,27 +21,48 @@ app.get('/', (req, res) => {
     })
 });
 
+import { v2 } from '@google-cloud/translate'
+
+async function translateText(text, target) {
+    const translate = new v2.Translate({ 'apiEndpoint': 'translation.googleapis.com' });
+    const [translation] = await translate.translate(text, target);
+    return translation;
+}
+
 app.post('/', async (req, res) => {
     try {
         const prompt = req.body.prompt;
 
-        const response = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `${prompt}`,
-            temperature: 0,
-            max_tokens: 3000,
-            top_p: 1,
-            frequency_penalty: 0.5,
-            presence_penalty: 0,
-        })
+        if (prompt.match(/[a-z]/i)) {
+            const error = 'Одоогоор латин үсгээр бичигдсэн, чат/мэссэжний хэллэг арай ойлгохгүй байна. Харин та Монголоор, үг үсгийн алдаагүй бичээд асуултаа асуугаад үзээрэй. ☺️'
+            console.log(error);
+            res.status(200).send({
+                bot: error,
+            })
+        } else {
+            const translatedPrompt = await translateText(prompt, 'en-US');
+            console.log(translatedPrompt);
+            const response = await openai.createCompletion({
+                model: "text-davinci-003",
+                prompt: `${translatedPrompt}`,
+                temperature: 0,
+                max_tokens: 3000,
+                top_p: 1,
+                frequency_penalty: 0.5,
+                presence_penalty: 0,
+            })
+            console.log(response.data.choices[0].text);
+            const translatedResponse = await translateText(response.data.choices[0].text, 'mn-MN');
+            console.log(translatedResponse);
+            res.status(200).send({
+                bot: translatedResponse,
+            })
+        }
 
-        res.status(200).send({
-            bot: response.data.choices[0].text,
-        })
     } catch (error) {
         console.log(error);
         res.status(500).send({ error })
     }
 })
 
-app.listen(5000, () => console.log('Server is running on port http://localhost:5000'));
+app.listen(5050, () => console.log('Server is running on port http://localhost:5050'));
