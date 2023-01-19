@@ -11,6 +11,10 @@ body {
   background: #343541;
 }
 
+#bodyol {
+  margin-top: 1%;
+}
+
 #app {
   width: 100vw;
   height: 100vh;
@@ -20,6 +24,20 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+}
+
+#h3header {
+  text-align: center;
+  color: #10a37f;
+  margin-top: 20%;
+}
+
+.bodytext {
+  text-align: center;
+  color: #10a37f;
+  margin-left: 20%;
+  margin-right: 20%;
+  font-weight: 500;
 }
 
 #chat_container {
@@ -135,6 +153,10 @@ textarea {
   border-radius: 5px;
   border: none;
   outline: none;
+}
+
+textarea::placeholder {
+  color: rgb(180, 138, 247);
 }
 
 button {

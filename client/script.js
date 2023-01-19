@@ -3,6 +3,7 @@ import user from './assets/user.svg';
 
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
+const welcomeText = document.querySelector('#welcometext');
 
 let loadInterval;
 
@@ -63,7 +64,7 @@ function chatStripe(isAI, value, uniqueId) {
 // submit response
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+  welcomeText.innerHTML = "";
   const data = new FormData(form);
 
   // users chat stripe
@@ -113,7 +114,6 @@ const handleSubmit = async (e) => {
   }
 
 }
-
 
 // call handleSubmit upon user submit the message
 form.addEventListener('submit', handleSubmit);
