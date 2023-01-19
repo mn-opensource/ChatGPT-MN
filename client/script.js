@@ -7,23 +7,23 @@ const chatContainer = document.querySelector('#chat_container');
 let loadInterval;
 
 // loading bot message using three dots (...)
-function loader(element){
+function loader(element) {
   element.textContent = '';
 
   loadInterval = setInterval(() => {
     element.textContent += '.';
 
-    if(element.textContent === '....')
+    if (element.textContent === '....')
       element.textContent = '';
   }, 300)
 }
 
 // function to give typing effect of bot output
-function typeText(element, text){
+function typeText(element, text) {
   let index = 0;
 
   let interval = setInterval(() => {
-    if(index < text.length){
+    if (index < text.length) {
       element.innerHTML += text.charAt(index);
       index++;
     }
@@ -33,7 +33,7 @@ function typeText(element, text){
 }
 
 // generate unique ID for each message
-function generateUniqueId(element){
+function generateUniqueId(element) {
   const timestamp = Date.now();
   const randomNumber = Math.random();
   const hexadecimalNumber = randomNumber.toString(16);
@@ -42,7 +42,7 @@ function generateUniqueId(element){
 }
 
 // box container around each message
-function chatStripe(isAI, value, uniqueId){
+function chatStripe(isAI, value, uniqueId) {
   return (
     `
       <div class="wrapper ${isAI && 'ai'}">
@@ -61,10 +61,10 @@ function chatStripe(isAI, value, uniqueId){
 }
 
 // submit response
-const handleSubmit = async(e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const data  = new FormData(form);
+  const data = new FormData(form);
 
   // users chat stripe
   chatContainer.innerHTML += chatStripe(false, data.get("prompt"));
@@ -84,7 +84,7 @@ const handleSubmit = async(e) => {
 
 
   // fetch data from server (bots response)
-  const response = await fetch('https://chatgptclone.onrender.com/', {
+  const response = await fetch('https://chatgpt-mn.onrender.com', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -98,15 +98,15 @@ const handleSubmit = async(e) => {
 
   messageDiv.innerHTML = "";
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
     const parsedData = data.bot.trim();
 
-    console.log({parsedData});
+    console.log({ parsedData });
 
     typeText(messageDiv, parsedData);
   }
-  else{
+  else {
     const err = await response.text();
     messageDiv.innerHTML = "Something went wrong :(";
     alert(err);
